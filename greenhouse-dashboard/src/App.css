@@ -1,23 +1,27 @@
 /* === Dark Theme === */
 :root[data-theme="dark"] {
   --bg: #121212;
-  --bg-card: #1e1e1e;
-  --bg-card-alt: #252525;
+  --bg-card: rgba(30, 30, 30, 0.7);
+  --bg-card-alt: rgba(40, 40, 40, 0.7);
   --text: #e4e4e4;
-  --primary: #2ecc71; /* hijau segar */
+  --primary: linear-gradient(135deg, #2ecc71, #16a085);
   --primary-dark: #27ae60;
   --accent: #16a085;
+  --shadow-light: rgba(255,255,255,0.05);
+  --shadow-dark: rgba(0,0,0,0.7);
 }
 
 /* === Light Theme === */
 :root[data-theme="light"] {
   --bg: #f5f5f5;
-  --bg-card: #ffffff;
-  --bg-card-alt: #f0f0f0;
+  --bg-card: rgba(255,255,255,0.8);
+  --bg-card-alt: rgba(245,245,245,0.8);
   --text: #222;
-  --primary: #27ae60;
+  --primary: linear-gradient(135deg, #27ae60, #2ecc71);
   --primary-dark: #1e8449;
   --accent: #16a085;
+  --shadow-light: rgba(255,255,255,0.7);
+  --shadow-dark: rgba(0,0,0,0.1);
 }
 
 /* === Global === */
@@ -26,22 +30,26 @@ body {
   font-family: "Segoe UI", Arial, sans-serif;
   background-color: var(--bg);
   color: var(--text);
-  transition: background 0.3s ease, color 0.3s ease;
+  transition: background 0.5s ease, color 0.5s ease;
 }
 
 /* === Header === */
 .header {
   text-align: center;
-  padding: 20px;
+  padding: 20px 40px;
   background: var(--bg-card);
-  border-bottom: 2px solid var(--primary);
+  border-bottom: 2px solid var(--primary-dark);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 4px 20px var(--shadow-dark);
 }
 .header h1 {
   margin: 0;
-  color: var(--primary);
+  background: var(--primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .header p {
   margin: 5px 0 0;
@@ -49,96 +57,105 @@ body {
   color: var(--accent);
 }
 
-/* === Layout Cards === */
+/* === Layout Cards (Glassmorphism) === */
 .cards-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
-  padding: 20px;
+  padding: 30px 20px;
 }
 
 .card {
   background: var(--bg-card);
-  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  transition: transform 0.2s ease, background 0.2s ease;
+  box-shadow: 0 8px 20px var(--shadow-dark);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 .card:nth-child(odd) {
   background: var(--bg-card-alt);
 }
 .card:hover {
-  transform: translateY(-5px);
-  background: var(--primary-dark);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 30px var(--shadow-dark);
 }
 
-/* === Inputs & Labels === */
+/* === Inputs & Labels (Neumorphism) === */
 label {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-size: 14px;
 }
 input {
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #444;
-  background: #2a2a2a;
-  color: #fff;
-  width: 70px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: none;
+  background: var(--bg-card-alt);
+  color: var(--text);
+  width: 80px;
+  box-shadow: inset 5px 5px 10px var(--shadow-dark),
+              inset -5px -5px 10px var(--shadow-light);
+  transition: all 0.3s ease;
 }
-:root[data-theme="light"] input {
-  background: #fff;
-  color: #000;
-  border: 1px solid #ccc;
+input:focus {
+  outline: none;
+  box-shadow: inset 3px 3px 8px var(--shadow-dark),
+              inset -3px -3px 8px var(--shadow-light),
+              0 0 8px var(--accent);
 }
 
-/* === Button === */
+/* === Buttons === */
 button {
-  padding: 10px 16px;
-  background: var(--primary);
-  color: white;
+  padding: 12px 20px;
+  border-radius: 50px;
   border: none;
-  border-radius: 100px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  background: var(--primary);
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 5px 5px 15px var(--shadow-dark), -5px -5px 15px var(--shadow-light);
+  transition: all 0.3s ease;
 }
 button:hover {
-  background: var(--accent);
+  transform: scale(1.05);
+  background: var(--primary-dark);
+  box-shadow: 8px 8px 20px var(--shadow-dark), -8px -8px 20px var(--shadow-light);
 }
 
-/* === Theme Toggle (elegan) === */
+/* === Theme Toggle (Playful) === */
 .theme-toggle {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 24px;
   color: var(--text);
-  transition: transform 0.2s ease;
+  transition: transform 0.4s ease, color 0.4s ease;
 }
 .theme-toggle:hover {
-  transform: rotate(20deg);
+  transform: rotate(30deg) scale(1.2);
+  color: var(--accent);
 }
 
 /* === Responsive Layout === */
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    padding: 20px;
   }
   .cards-container {
-    grid-template-columns: 1fr; /* stack 1 kolom di HP */
+    grid-template-columns: 1fr;
+    padding: 20px;
   }
 }
+
 /* === Smooth Theme Transition === */
 :root {
-  transition: background-color 0.4s ease, color 0.4s ease;
+  transition: all 0.5s ease;
 }
-
-body, .card, .header {
-  transition: background-color 0.4s ease, color 0.4s ease;
-}
-button, input {
-  transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
+body, .card, .header, button, input {
+  transition: all 0.5s ease;
 }
