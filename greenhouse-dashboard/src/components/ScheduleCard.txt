@@ -1,0 +1,56 @@
+import { useState, useEffect } from "react";
+import { ref, onValue, set } from "firebase/database";
+import { db } from "../firebase";
+
+export default function ScheduleCard() {
+  const [hour, setHour] = useState("06");
+  const [minute, setMinute] = useState("00");
+
+  useEffect(() => {
+    const scheduleRef = ref(db, "sprinkler/schedule");
+
+    const unsub = onValue(scheduleRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const { hour, minute } = snapshot.val();
+        setHour(hour);
+        setMinute(minute);
+      }
+    });
+
+    return () => unsub();
+  }, []);
+
+  const handleSave = async () => {
+    await set(ref(db, "sprinkler/schedule"), { hour, minute });
+    alert(`Jadwal tersimpan: ${hour}:${minute}`);
+  };
+
+  return (
+    <div className="card">
+      <h2>⏰ Jadwal Sprinkler</h2>
+      <div className="card-content">
+        <label>
+          Jam:
+          <input
+            type="number"
+            min="0"
+            max="23"
+            value={hour}
+            onChange={(e) => setHour(e.target.value)}
+          />
+        </label>
+        <label>
+          Menit:
+          <input
+            type="number"
+            min="0"
+            max="59"
+            value={minute}
+            onChange={(e) => setMinute(e.target.value)}
+          />
+        </label>
+        <button onClick={handleSave}>Simpan Jadwal</button>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,144 @@
+/* === Dark Theme === */
+:root[data-theme="dark"] {
+  --bg: #121212;
+  --bg-card: #1e1e1e;
+  --bg-card-alt: #252525;
+  --text: #e4e4e4;
+  --primary: #2ecc71; /* hijau segar */
+  --primary-dark: #27ae60;
+  --accent: #16a085;
+}
+
+/* === Light Theme === */
+:root[data-theme="light"] {
+  --bg: #f5f5f5;
+  --bg-card: #ffffff;
+  --bg-card-alt: #f0f0f0;
+  --text: #222;
+  --primary: #27ae60;
+  --primary-dark: #1e8449;
+  --accent: #16a085;
+}
+
+/* === Global === */
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* === Header === */
+.header {
+  text-align: center;
+  padding: 20px;
+  background: var(--bg-card);
+  border-bottom: 2px solid var(--primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header h1 {
+  margin: 0;
+  color: var(--primary);
+}
+.header p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: var(--accent);
+}
+
+/* === Layout Cards === */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.card:nth-child(odd) {
+  background: var(--bg-card-alt);
+}
+.card:hover {
+  transform: translateY(-5px);
+  background: var(--primary-dark);
+}
+
+/* === Inputs & Labels === */
+label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+input {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: #fff;
+  width: 70px;
+}
+:root[data-theme="light"] input {
+  background: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+}
+
+/* === Button === */
+button {
+  padding: 10px 16px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+button:hover {
+  background: var(--accent);
+}
+
+/* === Theme Toggle (elegan) === */
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--text);
+  transition: transform 0.2s ease;
+}
+.theme-toggle:hover {
+  transform: rotate(20deg);
+}
+
+/* === Responsive Layout === */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cards-container {
+    grid-template-columns: 1fr; /* stack 1 kolom di HP */
+  }
+}
+/* === Smooth Theme Transition === */
+:root {
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+body, .card, .header {
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+button, input {
+  transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
+}

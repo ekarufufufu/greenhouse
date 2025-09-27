@@ -1,0 +1,35 @@
+import { useState, useEffect } from "react";
+import { ref, onValue, set } from "firebase/database";
+import { db } from "../firebase";
+
+export default function ManualSprinklerCard() {
+  const [status, setStatus] = useState(false);
+
+  useEffect(() => {
+    const statusRef = ref(db, "sprinkler/manual/status");
+
+    const unsub = onValue(statusRef, (snapshot) => {
+      if (snapshot.exists()) {
+        setStatus(snapshot.val());
+      }
+    });
+
+    return () => unsub();
+  }, []);
+
+  const toggleSprinkler = async () => {
+    const newStatus = !status;
+    await set(ref(db, "sprinkler/manual/status"), newStatus);
+    setStatus(newStatus);
+  };
+
+  return (
+    <div className="card">
+      <h2>💧 Manual Sprinkler</h2>
+      <p>Status: {status ? "Menyala" : "Mati"}</p>
+      <button onClick={toggleSprinkler}>
+        {status ? "Matikan" : "Nyalakan"}
+      </button>
+    </div>
+  );
+}
