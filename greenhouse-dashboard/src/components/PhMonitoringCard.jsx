@@ -1,27 +1,35 @@
 import { useEffect, useState } from "react";
-import { ref, onValue } from "firebase/database";
 import { db } from "../firebase";
+import { ref, onValue } from "firebase/database";
 
 export default function PhMonitoringCard() {
   const [ph, setPh] = useState(null);
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState(null);
 
   useEffect(() => {
-    const phRef = ref(db, "greenhouse");
+    const phRef = ref(db, "greenhouse/ph");
+    const timeRef = ref(db, "greenhouse/time");
+
     onValue(phRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        setPh(data.ph);
-        setTime(data.time);
-      }
+      setPh(snapshot.val());
+    });
+
+    onValue(timeRef, (snapshot) => {
+      setTime(snapshot.val());
     });
   }, []);
 
   return (
-    <div className="p-4 rounded-2xl shadow bg-white">
-      <h2 className="text-xl font-bold">pH Monitoring</h2>
-      <p className="mt-2 text-base">Latest pH: {ph ?? "--"}</p>
-      <p className="text-sm text-gray-500">Updated: {time}</p>
+    <div className="bg-white dark:bg-gray-800 shadow rounded-xl p-4 w-full">
+      <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+        Monitoring pH
+      </h2>
+      <p className="text-gray-600 dark:text-gray-300">
+        pH: <span className="font-bold">{ph ? ph.toFixed(2) : "..."}</span>
+      </p>
+      <p className="text-gray-600 dark:text-gray-300">
+        Terakhir Update: <span className="font-mono">{time || "..."}</span>
+      </p>
     </div>
   );
 }

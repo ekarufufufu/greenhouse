@@ -3,38 +3,41 @@ import { db } from "../firebase";
 import { ref, onValue, set } from "firebase/database";
 
 export default function ManualSprinklerCard() {
-  const [status, setStatus] = useState("OFF");
+  const [relay, setRelay] = useState("OFF");
 
   useEffect(() => {
     const relayRef = ref(db, "greenhouse/relay");
     onValue(relayRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setStatus(snapshot.val());
-      }
+      setRelay(snapshot.val());
     });
   }, []);
 
-  const toggleSprinkler = () => {
-    const newStatus = status === "ON" ? "OFF" : "ON";
+  const toggleRelay = () => {
+    const newStatus = relay === "ON" ? "OFF" : "ON";
     set(ref(db, "greenhouse/relay"), newStatus);
   };
 
   return (
-    <div className="card">
-      <h2 className="text-lg font-semibold mb-4">Manual Sprinkler</h2>
-      <div className="card-content">
-        <button
-          onClick={toggleSprinkler}
-          className={`w-full py-2 rounded-lg font-medium transition ${
-            status === "ON"
-              ? "bg-green-600 hover:bg-green-700 text-white"
-              : "bg-gray-500 hover:bg-gray-600 text-white"
+    <div className="bg-white dark:bg-gray-800 shadow rounded-xl p-4 w-full">
+      <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+        Sprinkler Manual
+      </h2>
+      <p className="text-gray-600 dark:text-gray-300">
+        Status:{" "}
+        <span
+          className={`font-bold ${
+            relay === "ON" ? "text-green-500" : "text-red-500"
           }`}
         >
-          {status === "ON" ? "Turn OFF" : "Turn ON"}
-        </button>
-        <p className="mt-2 text-sm opacity-75">Current: {status}</p>
-      </div>
+          {relay}
+        </span>
+      </p>
+      <button
+        onClick={toggleRelay}
+        className="mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+      >
+        {relay === "ON" ? "Turn OFF" : "Turn ON"}
+      </button>
     </div>
   );
 }

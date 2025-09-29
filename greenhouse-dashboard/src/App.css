@@ -1,169 +1,217 @@
 /* ================================
-   === Theme Variables ===
+   THEME VARIABLES
 ================================= */
 
-/* === Dark Theme === */
+/* Dark Theme */
 :root[data-theme="dark"] {
-  --bg: #121212;
-  --bg-card: #1e1e1e;
-  --bg-card-alt: #252525;
+  --bg: #0a0a0a;
+  --bg-card: rgba(255, 255, 255, 0.06);
   --text: #e4e4e4;
-  --primary: #2ecc71;       /* hijau segar */
-  --primary-dark: #27ae60;
-  --accent: #16a085;
+  --text-muted: #a0a0a0;
+  --primary: #00ffa3; /* neon green */
+  --accent: #00d4ff;  /* neon cyan */
+  --border: rgba(255, 255, 255, 0.2);
+  --shadow: rgba(0, 0, 0, 0.7);
 }
 
-/* === Light Theme === */
+/* Light Theme */
 :root[data-theme="light"] {
-  --bg: #f5f5f5;
-  --bg-card: #ffffff;
-  --bg-card-alt: #f0f0f0;
-  --text: #222222;
-  --primary: #27ae60;
-  --primary-dark: #1e8449;
-  --accent: #16a085;
+  --bg: #f0f0f5;
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --text: #1c1c1c;
+  --text-muted: #555;
+  --primary: #009970;
+  --accent: #0066cc;
+  --border: rgba(0, 0, 0, 0.1);
+  --shadow: rgba(0, 0, 0, 0.15);
 }
 
 /* ================================
-   === Global Styles ===
+   GLOBAL
 ================================= */
 body {
   margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background-color: var(--bg);
+  padding: 0;
+  font-family: "Poppins", Arial, sans-serif;
+  background: var(--bg);
   color: var(--text);
-  transition: background-color 0.4s ease, color 0.4s ease;
+  transition: background 0.4s ease, color 0.4s ease;
+  background-image: radial-gradient(circle at 20% 20%, #1e293b 0%, transparent 60%),
+                    radial-gradient(circle at 80% 80%, #0f766e 0%, transparent 50%);
+  background-attachment: fixed;
 }
 
-:root,
-body,
-.card,
-.header,
-button,
-input {
-  transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
+h1, h2 {
+  font-weight: 600;
+  margin: 0;
+}
+
+p {
+  margin: 0.5rem 0;
+}
+
+/* Smooth transition all */
+:root, body, .card, .header, button, input {
+  transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
 }
 
 /* ================================
-   === Header ===
+   HEADER
 ================================= */
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
-  background-color: var(--bg-card);
-  border-bottom: 2px solid var(--primary);
-  text-align: center;
+  padding: 1rem 2rem;
+  background: rgba(20, 20, 20, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 8px var(--shadow);
 }
 
 .header h1 {
-  margin: 0;
-  color: var(--primary);
+  font-size: 1.5rem;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .header p {
-  margin: 5px 0 0;
-  font-size: 14px;
-  color: var(--accent);
+  font-size: 0.9rem;
+  color: var(--text-muted);
 }
 
 /* ================================
-   === Cards Layout ===
+   CARDS - GLASS STYLE
 ================================= */
 .cards-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  padding: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1400px;   /* batas maksimum biar ga kepanjangan */
+  margin: 0 auto;      /* biar center */
 }
+
 
 .card {
-  background-color: var(--bg-card);
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 24px var(--shadow);
+  overflow: hidden;
 }
 
-.card:nth-child(odd) {
-  background-color: var(--bg-card-alt);
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  background-color: var(--primary-dark);
+.card h2 {
+  margin-bottom: 0.75rem;
+  font-size: 1.2rem;
+  color: var(--primary);
 }
 
 /* ================================
-   === Inputs & Labels ===
+   FORMS
 ================================= */
 label {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 0.25rem;
 }
 
-input {
-  width: 70px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #444;
-  background-color: #2a2a2a;
-  color: #fff;
+input[type="time"], input[type="text"], select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  font-size: 0.95rem;
 }
 
-:root[data-theme="light"] input {
-  background-color: #ffffff;
-  color: #000000;
-  border: 1px solid #ccc;
+input:focus, select:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.3);
+}
+
+input[type="checkbox"] {
+  transform: scale(1.2);
+  accent-color: var(--primary);
+  cursor: pointer;
 }
 
 /* ================================
-   === Buttons ===
+   BUTTONS - NEON PILL
 ================================= */
 button {
-  padding: 10px 16px;
+  padding: 0.7rem 1.4rem;
   border: none;
-  border-radius: 100px;
+  border-radius: 9999px;
   cursor: pointer;
-  background-color: var(--primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   color: #fff;
-  transition: background-color 0.2s ease;
+  box-shadow: 0 0 12px var(--accent);
+  transition: transform 0.15s ease, box-shadow 0.3s ease;
 }
 
 button:hover {
-  background-color: var(--accent);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 0 18px var(--primary), 0 0 30px var(--accent);
 }
 
-/* ================================
-   === Theme Toggle Button ===
-================================= */
+button:active {
+  transform: scale(0.97);
+}
+
+/* Theme Toggle */
 .theme-toggle {
+  font-size: 1.5rem;
   background: none;
   border: none;
-  cursor: pointer;
-  font-size: 20px;
   color: var(--text);
+  cursor: pointer;
   transition: transform 0.2s ease;
 }
 
 .theme-toggle:hover {
-  transform: rotate(20deg);
+  transform: rotate(25deg) scale(1.2);
+  color: var(--accent);
 }
 
 /* ================================
-   === Responsive Design ===
+   RESPONSIVE
 ================================= */
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
-    gap: 10px;
+    text-align: center;
+    gap: 0.5rem;
   }
-
   .cards-container {
-    grid-template-columns: 1fr; /* stack 1 kolom di HP */
+    grid-template-columns: 1fr;
   }
 }

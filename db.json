@@ -1,0 +1,12 @@
+{
+  "greenhouse": {
+    "ph": 7.0,
+    "time": "00:00:00",
+    "relay": "OFF",
+    "schedule": {
+      "enabled": false,
+      "startTime": "06:00",
+      "endTime": "06:15"
+    }
+  }
+}

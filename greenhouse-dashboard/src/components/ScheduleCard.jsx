@@ -1,58 +1,78 @@
-import { useState } from "react";
-import { ref, set } from "firebase/database";
+import { useEffect, useState } from "react";
 import { db } from "../firebase";
+import { ref, onValue, set, update } from "firebase/database";
 
 export default function ScheduleCard() {
-  const [start, setStart] = useState("06:00");
-  const [end, setEnd] = useState("06:15");
   const [enabled, setEnabled] = useState(false);
+  const [startTime, setStartTime] = useState("06:00");
+  const [endTime, setEndTime] = useState("07:15");
 
+  // Ambil data dari Firebase
+  useEffect(() => {
+    const scheduleRef = ref(db, "greenhouse/schedule");
+    onValue(scheduleRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setEnabled(data.enabled ?? false);
+        setStartTime(data.startTime ?? "06:00");
+        setEndTime(data.endTime ?? "07:15");
+      }
+    });
+  }, []);
+
+  // Update ke Firebase
   const saveSchedule = () => {
-    set(ref(db, "greenhouse/schedule"), {
+    update(ref(db, "greenhouse/schedule"), {
       enabled,
-      startTime: start,
-      endTime: end,
+      startTime,
+      endTime,
     });
   };
 
   return (
-    <div className="p-4 rounded-2xl shadow bg-white">
-      <h2 className="text-xl font-bold">Sprinkler Schedule</h2>
+    <div className="bg-white dark:bg-gray-800 shadow rounded-xl p-4 w-full">
+      <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+        Jadwal Sprinkler
+      </h2>
 
-      <div className="mt-2">
-        <label className="block text-sm">Start Time</label>
-        <input
-          type="time"
-          value={start}
-          onChange={(e) => setStart(e.target.value)}
-          className="border rounded p-1"
-        />
-      </div>
-
-      <div className="mt-2">
-        <label className="block text-sm">End Time</label>
-        <input
-          type="time"
-          value={end}
-          onChange={(e) => setEnd(e.target.value)}
-          className="border rounded p-1"
-        />
-      </div>
-
-      <div className="mt-2 flex items-center gap-2">
+      {/* Enable toggle */}
+      <div className="flex items-center space-x-2 mt-2">
         <input
           type="checkbox"
           checked={enabled}
           onChange={(e) => setEnabled(e.target.checked)}
         />
-        <span>Enable Schedule</span>
+        <span className="text-gray-700 dark:text-gray-200">Tetapkan Jadwal</span>
       </div>
 
+      {/* Input waktu */}
+      <div className="flex flex-col mt-3 space-y-2">
+        <label className="text-gray-700 dark:text-gray-200">
+          Mulai:
+          <input
+            type="time"
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+            className="ml-2 px-2 py-1 border rounded-lg"
+          />
+        </label>
+        <label className="text-gray-700 dark:text-gray-200">
+          Selesai:
+          <input
+            type="time"
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
+            className="ml-2 px-2 py-1 border rounded-lg"
+          />
+        </label>
+      </div>
+
+      {/* Save button */}
       <button
         onClick={saveSchedule}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow"
+        className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
       >
-        Save
+        Simpan Jadwal
       </button>
     </div>
   );
